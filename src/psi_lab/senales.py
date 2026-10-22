@@ -26,3 +26,16 @@ def espectro(x, fs):
     # frecuencias negativas se suma a las positivas.
     amp[1 : (n + 1) // 2] *= 2
     return freqs, amp
+
+
+def cuadrada(f, fs, duracion, amplitud=1.0):
+    """Onda cuadrada de frecuencia f [Hz] muestreada a fs [Hz] durante duracion [s].
+
+    Vale +amplitud en la primera mitad de cada periodo y -amplitud en la segunda.
+    Retorna (t, x): instantes de muestreo y valores de la senal.
+    """
+    n = round(fs * duracion)
+    k = np.arange(n)
+    t = k / fs
+    fraccion = (k * f / fs) % 1.0  # posicion dentro del periodo, en [0, 1)
+    return t, amplitud * np.where(fraccion < 0.5, 1.0, -1.0)
